@@ -134,5 +134,34 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Amazon EKS') {
+            steps {
+            script {
+            // Define the AWS region and cluster name
+            def awsRegion = 'us-west-2'
+            def clusterName = 'fleetman'
+
+            // Ensure that you have configured your Kubeconfig file manually
+            // If you haven't, you can configure it using 'aws eks update-kubeconfig' command
+
+            // Set the KUBECONFIG environment variable to the path of your Kubeconfig file
+            def kubeconfigPath = "/root/.kube/config"
+            env.KUBECONFIG = kubeconfigPath
+
+            // Verify that the KUBECONFIG variable is set correctly
+            echo "KUBECONFIG set to: ${env.KUBECONFIG}"
+
+            // List available contexts in the KUBECONFIG file
+            sh "kubectl config get-contexts"
+
+            // Automatically set the current context to the desired context
+            sh "kubectl config use-context ${your-context-name}"
+
+            // Now, you can deploy your workloads to EKS using 'kubectl apply'
+            sh "kubectl apply -f workloads.yaml"
+        }    
+            }
+        }
     }
 }
