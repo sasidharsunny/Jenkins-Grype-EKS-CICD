@@ -172,7 +172,7 @@ pipeline {
                  sh "aws eks update-kubeconfig --name ${clusterName} --region ${awsRegion}"
                 
             // Automatically set the current context to the desired context
-                sh "kubectl config use-context ${your-context-name}"
+                sh "kubectl config use-context ${arn:aws:eks:us-west-2:729590520513:cluster/fleetman}"
 
             // Now, you can deploy your workloads to EKS using 'kubectl apply'
             sh "kubectl apply -f workloads.yaml"
