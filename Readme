@@ -1,0 +1,15 @@
+Plugins
+ECR
+Docker pipeline 
+Docker plugin
+CloudBees Docker Build and Publish
+Sonarqube scanner
+Amazon ECR Plugin
+Amazon Elastic Container Service (ECS) / Fargate plugin
+CloudBees AWS Credentials Plugin
+Pipeline: AWS Steps
+Pipeline maven integration
+Pipeline utility steps
+JaCoCo
+Junit plugin
+

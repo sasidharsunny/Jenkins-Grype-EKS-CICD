@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vprofile-deployment
+  labels:
+    app: vprofile
+spec:
+  replicas: 2 # You can adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: vprofile
+  template:
+    metadata:
+      labels:
+        app: vprofile
+    spec:
+      containers:
+        - name: vprofile
+          image: 729590520513.dkr.ecr.us-west-2.amazonaws.com/hellodatarepo:latest # Replace with your ECR image URL
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "512Mi" # Adjust resource limits as needed
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vprofile-service
+spec:
+  selector:
+    app: vprofile
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer # Use "LoadBalancer" to expose the service to the internet
