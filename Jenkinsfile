@@ -175,6 +175,13 @@ pipeline {
             // Automatically set the current context to the desired context
                 sh "kubectl config use-context ${contextName}"
 
+
+            // Set the AWS credentials for this session
+                sh """
+                    aws configure set aws_access_key_id ${awsAccessKeyId}
+                    aws configure set region ${awsRegion}
+                """
+                
             // Now, you can deploy your workloads to EKS using 'kubectl apply'
             sh "kubectl apply -f workloads.yaml"
                 }    
