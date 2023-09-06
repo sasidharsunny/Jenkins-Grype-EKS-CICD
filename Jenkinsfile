@@ -139,9 +139,9 @@ pipeline {
         stage('Configure Kubectl') {
             steps {
                 script {
-                      def kubectlPath = "/root/kubectl"
-                      // Replace with the actual path to kubectl
-                
+                        // Replace with the actual path to kubectl
+                          def kubectlPath = "/usr/local/bin/kubectl"
+    
                       // Add kubectl to the system PATH
                       sh "export PATH=\$PATH:${kubectlPath}"
                     }
