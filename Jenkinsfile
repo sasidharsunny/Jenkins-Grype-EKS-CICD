@@ -152,5 +152,49 @@ pipeline {
     }
 
 
-  }
+stage('Download and Configure Kubeconfig') {
+            steps {
+                script {
+                    // Define the AWS region and cluster name
+                    def awsRegion = 'us-west-2'
+                    def clusterName = 'fleetman'
+
+                    // Define the KUBECONFIG file path
+                    def kubeconfigPath = "${env.WORKSPACE}/kubeconfig.yaml"
+
+                    // Download the KUBECONFIG file from EKS
+                    sh "aws eks --region ${awsRegion} update-kubeconfig --name ${clusterName} --kubeconfig ${kubeconfigPath}"
+
+                    // Set the KUBECONFIG environment variable
+                    env.KUBECONFIG = kubeconfigPath
+
+                    // Verify that the KUBECONFIG variable is set correctly
+                    echo "KUBECONFIG set to: ${env.KUBECONFIG}"
+
+                    // List available contexts in the KUBECONFIG file
+                    sh "kubectl config get-contexts"
+
+                    // Automatically set the current context to the first available context
+                    sh "kubectl config use-context \$(kubectl config get-contexts -o name | head -n 1)"
+                }
+            }
+        }
+
+        stage('Deploy to Amazon EKS') {
+            steps {
+                script {
+                    // Use the 'workloads.yaml' file for deployment
+                    sh "kubectl apply -f workloads.yaml"
+                }
+            }
+        }
+
+
+  } //stages
+   post {
+        success {
+            // Clean up the downloaded kubeconfig file
+            sh "rm -f ${env.KUBECONFIG}"
+        }
+    }
 }
