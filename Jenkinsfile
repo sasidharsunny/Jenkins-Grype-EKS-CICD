@@ -159,7 +159,7 @@ pipeline {
             // If you haven't, you can configure it using 'aws eks update-kubeconfig' command
 
             // Set the KUBECONFIG environment variable to the path of your Kubeconfig file
-            def kubeconfigPath = "/root/.kube/config"
+            def kubeconfigPath = "/.kube/config"
             env.KUBECONFIG = kubeconfigPath
 
             // Verify that the KUBECONFIG variable is set correctly
