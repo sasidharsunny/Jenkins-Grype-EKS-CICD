@@ -155,6 +155,7 @@ pipeline {
             def awsRegion = 'us-west-2'
             def clusterName = 'fleetman'
             def contextName = 'arn:aws:eks:us-west-2:729590520513:cluster/fleetman'
+            
                 
             // Ensure that you have configured your Kubeconfig file manually
             // If you haven't, you can configure it using 'aws eks update-kubeconfig' command
@@ -175,12 +176,11 @@ pipeline {
             // Automatically set the current context to the desired context
                 sh "kubectl config use-context ${contextName}"
 
-
-            // Set the AWS credentials for this session
-                sh """
-                    aws configure set aws_access_key_id ${awsAccessKeyId}
-                    aws configure set region ${awsRegion}
-                """
+                 // Set the AWS credentials for this session
+                    sh """
+                        aws configure set aws_access_key_id ${awscreds}
+                        aws configure set region ${awsRegion}
+                    """
                 
             // Now, you can deploy your workloads to EKS using 'kubectl apply'
             sh "kubectl apply -f workloads.yaml"
