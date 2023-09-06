@@ -178,7 +178,7 @@ pipeline {
 
                  // Set the AWS credentials for this session
                     sh """
-                        aws configure set aws_access_key_id ${awscreds}
+                        aws configure set aws_access_key_id ${awsAccessKeyId}
                         aws configure set region ${awsRegion}
                     """
                 
