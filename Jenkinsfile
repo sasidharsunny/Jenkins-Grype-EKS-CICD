@@ -135,6 +135,19 @@ pipeline {
             }
         }
 
+        
+        stage('Configure Kubectl') {
+            steps {
+                script {
+                      def kubectlPath = "/root/kubectl"
+                      // Replace with the actual path to kubectl
+                
+                      // Add kubectl to the system PATH
+                      sh "export PATH=\$PATH:${kubectlPath}"
+                    }
+                  }
+                }
+        
         stage('Deploy to Amazon EKS') {
             steps {
             script {
@@ -160,7 +173,7 @@ pipeline {
 
             // Now, you can deploy your workloads to EKS using 'kubectl apply'
             sh "kubectl apply -f workloads.yaml"
-        }    
+                }    
             }
         }
     }
