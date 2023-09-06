@@ -168,8 +168,11 @@ pipeline {
             // List available contexts in the KUBECONFIG file
             sh "kubectl config get-contexts"
 
+            // Setting context
+             sh "aws eks update-kubeconfig --name ${clusterName} --region ${awsRegion}
+                
             // Automatically set the current context to the desired context
-            sh "kubectl config use-context ${your-context-name}"
+            //sh "kubectl config use-context ${your-context-name}"
 
             // Now, you can deploy your workloads to EKS using 'kubectl apply'
             sh "kubectl apply -f workloads.yaml"
