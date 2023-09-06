@@ -155,12 +155,22 @@ pipeline {
 stage('Download and Configure Kubeconfig') {
             steps {
                 script {
+                   // Retrieve AWS credentials from Jenkins credentials with ID 'awscreds'
+                    def awsCredentials = credentials('awscreds')
+                    def awsAccessKeyId = awsCredentials
+
                     // Define the AWS region and cluster name
                     def awsRegion = 'us-west-2'
                     def clusterName = 'fleetman'
 
                     // Define the KUBECONFIG file path
                     def kubeconfigPath = "${env.WORKSPACE}/kubeconfig.yaml"
+
+                    // Set the AWS credentials for this session
+                    sh """
+                        aws configure set aws_access_key_id ${awsAccessKeyId}
+                        aws configure set region ${awsRegion}
+                    """
 
                     // Download the KUBECONFIG file from EKS
                     sh "aws eks --region ${awsRegion} update-kubeconfig --name ${clusterName} --kubeconfig ${kubeconfigPath}"
