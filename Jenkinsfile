@@ -152,7 +152,7 @@ pipeline {
     }
 
 
-stage('Download and Configure Kubeconfig') {
+stage ('Download and Configure Kubeconfig') {
             steps {
                 script {
                    // Retrieve AWS credentials from Jenkins credentials with ID 'awscreds'
