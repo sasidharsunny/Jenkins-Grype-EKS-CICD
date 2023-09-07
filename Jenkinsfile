@@ -58,6 +58,7 @@ pipeline {
                         script {
                             sh 'aws eks update-kubeconfig --name poc-cluster --region us-east-2'
                             sh 'aws eks list-clusters'
+                            sh 'hostname -I'
                             sh 'kubectl get svc'
                             sh 'kubectl apply -f deployment.yaml'
                             sh 'kubectl apply -f service.yaml'
