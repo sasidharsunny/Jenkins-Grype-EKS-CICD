@@ -150,41 +150,34 @@ pipeline {
         
         stage('Deploy to Amazon EKS') {
             steps {
-            script {
-            // Define the AWS region and cluster name
-            def awsRegion = 'us-west-2'
-            def clusterName = 'fleetman'
-            def contextName = 'arn:aws:eks:us-west-2:729590520513:cluster/fleetman'
-            
-                
-            // Ensure that you have configured your Kubeconfig file manually
-            // If you haven't, you can configure it using 'aws eks update-kubeconfig' command
+             script {
+            // Define the AWS region and cluster name
+            def awsRegion = 'us-west-2'
+            def clusterName = 'fleetman'
+            def contextName = 'arn:aws:eks:us-west-2:729590520513:cluster/fleetman'
 
-            // Set the KUBECONFIG environment variable to the path of your Kubeconfig file
-            def kubeconfigPath = "/.kube/config"
-            env.KUBECONFIG = kubeconfigPath
+            // Set the AWS credentials for this session
+            withCredentials([usernamePassword(credentialsId: 'awscreds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh "aws configure set aws_access_key_id \$AWS_ACCESS_KEY_ID"
+                sh "aws configure set aws_secret_access_key \$AWS_SECRET_ACCESS_KEY"
+            }
 
-            // Verify that the KUBECONFIG variable is set correctly
-            echo "KUBECONFIG set to: ${env.KUBECONFIG}"
+            // Set the KUBECONFIG environment variable to the path of your Kubeconfig file
+            def kubeconfigPath = "~/.kube/config"
+            env.KUBECONFIG = kubeconfigPath
 
-            // List available contexts in the KUBECONFIG file
-            sh "kubectl config get-contexts"
+            // Verify that the KUBECONFIG variable is set correctly
+            echo "KUBECONFIG set to: ${env.KUBECONFIG}"
 
-            // Setting context
-                 sh "aws eks update-kubeconfig --name ${clusterName} --region ${awsRegion}"
-                
-            // Automatically set the current context to the desired context
-                sh "kubectl config use-context ${contextName}"
+            // List available contexts in the KUBECONFIG file
+            sh "kubectl config get-contexts"
 
-                 // Set the AWS credentials for this session
-                    sh """
-                        aws configure set aws_access_key_id ${awsAccessKeyId}
-                        aws configure set region ${awsRegion}
-                    """
-                
-            // Now, you can deploy your workloads to EKS using 'kubectl apply'
-            sh "kubectl apply -f workloads.yaml"
-                }    
+            // Setting context
+            sh "kubectl config use-context ${contextName}"
+
+            // Now, you can deploy your workloads to EKS using 'kubectl apply'
+            sh "kubectl apply -f workloads.yaml"
+        }   
             }
         }
     }
