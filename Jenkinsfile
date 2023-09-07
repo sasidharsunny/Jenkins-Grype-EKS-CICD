@@ -150,8 +150,8 @@ pipeline {
         
         stage('Deploy to Amazon EKS') {
             steps {
-             script {
-            // Define the AWS region and cluster name
+                script {
+            // Define the AWS region and cluster name
             def awsRegion = 'us-west-2'
             def clusterName = 'fleetman'
             def contextName = 'arn:aws:eks:us-west-2:729590520513:cluster/fleetman'
