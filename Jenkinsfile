@@ -54,9 +54,10 @@ pipeline {
         }
  stage('Integrate Jenkins with EKS Cluster and Deploy') {
                 steps {
-                    withAWS(credentials: 'aws-cred', region: '<REGION_NAME>') {
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-2') {
                         script {
-                            sh 'aws eks update-kubeconfig --name <CLUSTER_NAME> --region <REGION_NAME>'
+                            sh 'aws eks update-kubeconfig --name poc-cluster --region us-east-2'
+                            sh 'aws eks list-clusters'
                             sh 'kubectl get svc'
                             sh 'kubectl apply -f deployment.yaml'
                             sh 'kubectl apply -f service.yaml'
