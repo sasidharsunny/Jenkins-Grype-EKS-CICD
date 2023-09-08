@@ -52,21 +52,13 @@ pipeline {
                 }
             }
         }
- stage('Integrate Jenkins with EKS Cluster and Deploy') {
+  stage('Integrate Jenkins with EKS Cluster and Deploy') {
                 steps {
-                    withAWS(credentials: 'aws-credentials', region: 'us-east-2') {
-                        script {
-                            sh 'aws eks update-kubeconfig --name poc-cluster --region us-east-2'
-                            sh 'aws eks list-clusters'
-                            sh 'hostname -I'
-                            sh 'kubectl get svc'
-                            sh 'kubectl apply -f deployment.yaml'
-                            sh 'kubectl apply -f service.yaml'
-                        }
-                    }
+               withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s-jenkins', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+               sh 'kubectl apply -f workloads.yaml'
+}
                 }
             }
-            
         
     }
 }
