@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage("Checkout the project") {
             steps {
-                git branch: 'docker', url: 'https://github.com/devopshydclub/vprofile-project.git'
+                git branch: 'docker', url: 'https://github.com/mandelasasidhar/vprofile-project.git'
             }
         }
 
