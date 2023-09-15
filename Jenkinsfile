@@ -7,6 +7,8 @@ pipeline {
         registry = '729590520513.dkr.ecr.us-west-2.amazonaws.com/hellodatarepo'
         registryCredential = 'awscreds'
         dockerimage = ''
+        ARTIFACTORY_SERVER = "Artifactory"
+        ARTIFACTORY_REPO = "maven-artifact"
     }
     stages {
         stage("Checkout the project") {
@@ -52,6 +54,36 @@ pipeline {
                 }
             }
         }
+
+    stage('Upload to Artifactory') {
+            steps {
+                script {
+                    def server = Artifactory.server('jfrog-server-2')
+                    def uploadSpec = """{
+                        "files": [
+                            {
+                                "pattern": "*.war",
+                                "target": "maven/"
+                            },
+                              {
+                                "pattern": "*.jar",
+                                "target": "maven/"
+                            },
+                             {
+                                "pattern": "*.pom.xml",
+                                "target": "maven/"
+                            }
+                        ]
+                    }"""
+                    server.upload(uploadSpec)
+                }
+            }
+        }
+
+
+
+
+        
   stage('Integrate Jenkins with EKS Cluster and Deploy') {
                 steps {
                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s-jenkins', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
